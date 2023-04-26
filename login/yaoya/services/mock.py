@@ -5,13 +5,14 @@ from pathlib import Path
 from random import randint
 
 import dataset
+from tinydb import TinyDB
 from yaoya.const import UserRole
 from yaoya.models.user import User
 
 class MockDB:
     def __init__(self, dbpath: Path) -> None:
         s_dbpath = str(dbpath)
-        self._dname = f"sqlite:///{s_dbpath}"
+        self._dbname = f"sqlite:///{s_dbpath}"
         self._init_mock_db()
 
     @contextmanager
@@ -45,7 +46,18 @@ class MockDB:
                 role=UserRole.ADMIN,
             ),
         ]
-    with self.connect() as db:
-        table: dataset.Table = db["users"]
-        for mock_user in mock_users:
-            table.insert(mock_user.to_dict())
+        with self.connect() as db:
+            table: dataset.Table = db["users"]
+            for mock_user in mock_users:
+                table.insert(mock_user.to_dict())
+
+class MockSessionDB:
+    def __init__(self, dbpath: Path) -> None:
+        self._db = TinyDB(dbpath)
+
+    @contextmanager
+    def connect(self) -> Generator[TinyDB, None, None]:
+        try:
+            yield self._db
+        except Exception as e:
+            raise e

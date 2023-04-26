@@ -2,11 +2,10 @@ from typing import Protocol
 
 import dataset
 from yaoya.exceptions import YaoyaError
-from yaoya.models.cart import Cart
 from yaoya.models.session import Session
 from yaoya.services.mock import MockDB, MockSessionDB
 
-class AuthenticationError(YaoaError):
+class AuthenticationError(YaoyaError):
     pass
 
 class IAuthAPIClientService(Protocol):
@@ -24,7 +23,7 @@ class MockAuthAPIClientService(IAuthAPIClientService):
         if not self._verify_user(user_id, password):
             raise AuthenticationError
 
-        session = Session(user_id=user_id, cart=Cart(user_id))
+        session = Session(user_id=user_id)
         with self.session_db.connect() as db:
             db.insert(session.to_dict())
 

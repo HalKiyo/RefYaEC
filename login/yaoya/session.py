@@ -1,0 +1,57 @@
+from typing import Optional
+
+import streamlit as st
+
+from yaoya.const import PageId, SessionKey
+from yaoya.models.user import User
+from yaoya.services.auth import IAuthAPIClientService
+from yaoya.services.user import IUserAPIClientService
+
+
+class StreamlitSessionManager:
+    def __init__(
+        self,
+        auth_api_client: IAuthAPIClientService,
+        user_api_client: IUserAPIClientService,
+    ) -> None:
+        self._session_state = st.session_state
+        self._session_state[SessionKey.AUTH_API_CLIENT.name] = auth_api_client
+        self._session_state[SessionKey.USER_API_CLIENT.name] = user_api_client
+        self._session_state[SessionKey.USER.name] = None
+        self._session_state[SessionKey.PAGE_ID.name] = PageId.PUBLIC_LOGIN.name
+        self._session_state[SessionKey.SESSION_ID.name] = None
+        self._session_state[SessionKey.USERBOX.name] = None
+
+    def get_user(self) -> Optional[User]:
+        return self._session_state[SessionKey.USER.name]
+
+    def get_session_id(self) -> Optional[str]:
+        return self._session_state[SessionKey.SESSION_ID.name]
+
+    def get_auth_api_client(self) -> IAuthAPIClientService:
+        return self._session_state[SessionKey.AUTH_API_CLIENT.name]
+
+    def get_user_api_client(self) -> IUserAPIClientService:
+        return self._session_state[SessionKey.USER_API_CLIENT.name]
+
+    def set_user(self, user: User) -> None:
+        self._session_state[SessionKey.USER.name] = user
+
+        # 表示すユーザ名を更新
+        userbox = self._session_state[SessionKey.USERBOX.name]
+        userbox.text(f"ユーザ名: {user.name}")
+
+    def set_page_id(self, page_id: PageId) -> None:
+        self._session_state[SessionKey.PAGE_ID.name] = page_id.name
+
+    def set_session_id(self, session_id: str) -> None:
+        self._session_state[SessionKey.SESSION_ID.name] = session_id
+
+    def show_userbox(self) -> None:
+        userbox = self._session_state[SessionKey.USERBOX.name]
+        user = self.get_user()
+        if userbox is None or user is None:
+            self._session_state[SessionKey.USERBOX.name] = st.sidebar.text("ログインしていません")
+            return
+
+        self._session_state[SessionKey.USERBOX.name] = st.sidebar.text(f"ユーザ名: {user.name}")
