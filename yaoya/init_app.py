@@ -1,6 +1,8 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+from yaoya.session import StreamlitSessionManager
+
 # session_stateの初期化
 def init_session() -> StreamlitSessionManager:
     mockdir = Path(TemporaryDirectory().name) # (A)
