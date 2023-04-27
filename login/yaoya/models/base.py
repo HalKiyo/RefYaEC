@@ -9,3 +9,8 @@ class BaseDataModel(Protocol):
     @classmethod
     def from_dict(clas, data: dict[str, str]) -> BaseDataModel:
         pass
+
+class NotFoundError(Exception):
+    def __init__(self, user_id: str) -> None:
+        self.user_id = user_id
+        super().__init__(f"{user_id} not found")

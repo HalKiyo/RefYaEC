@@ -40,7 +40,7 @@ class MockDB:
             ),
             User(
                 user_id="admin",
-                nama="管理者",
+                name="管理者",
                 birthday=date(2000, 1, 1),
                 email="admin@example.com",
                 role=UserRole.ADMIN,

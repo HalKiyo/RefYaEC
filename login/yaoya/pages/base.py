@@ -1,9 +1,9 @@
 from yaoya.const import PageId
-from yaoya.session import STreamlitSessionManager
+from yaoya.session import StreamlitSessionManager
 
 class BasePage:
-    def __init__(self, page_id: PageId, title: str, ssm: StreamlitSessionManager) -> None:
-        self.page_id = page_id.name
+    def __init__(self, page_id: str, title: str, ssm: StreamlitSessionManager) -> None:
+        self.page_id = page_id
         self.title = title
         self.ssm = ssm
 
