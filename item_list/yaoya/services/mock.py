@@ -2,10 +2,14 @@ from collections.abc import Generator
 from contextlib import contextmanager
 from datetime import date
 from pathlib import Path
+from random import randint
 
 import dataset
+from mimesis import Field, Schema
+from mimesis.locales import Locale
 from tinydb import TinyDB
 from yaoya.const import UserRole
+from yaoya.modles.item import Item
 from yaoya.models.user import User
 
 class MockDB:
@@ -27,6 +31,7 @@ class MockDB:
 
     def _init_mock_db(self) -> None:
         self._create_mock_user_table()
+        self._create_mock_item_table()
 
     def _create_mock_user_table(self) -> None:
         mock_users = [
@@ -49,6 +54,17 @@ class MockDB:
             table: dataset.Table = db["users"]
             for mock_user in mock_users:
                 table.insert(mock_user.to_dict())
+
+    def _create_mock_item_table(self, n: int = 10) -> None:
+        _ = Field(locale=Locale.JA)
+        schema = Schema(
+            schema=lambda: {
+                "item_id": _("uuid"),
+                "name": _("vegetable"),
+                "price": randint(1, 5) * 100 - 2,
+                "producing_area": _("prefecture")
+            }
+        )
 
 class MockSessionDB:
     def __init__(self, dbpath: Path) -> None:
