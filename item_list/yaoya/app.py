@@ -18,7 +18,7 @@ class MultiPageApp:
             self.nav_label,
             list(self.pages.keys()),
             format_func=lambda page_id: self.pages[page_id].title,
-            key=SessionKey.PAGE_ID.name
+            key=SessionKey.PAGE_ID.name # keyでPageIDを指定している
         )
 
         self.ssm.show_userbox()

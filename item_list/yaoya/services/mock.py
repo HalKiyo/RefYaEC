@@ -9,8 +9,9 @@ from mimesis import Field, Schema
 from mimesis.locales import Locale
 from tinydb import TinyDB
 from yaoya.const import UserRole
-from yaoya.modles.item import Item
+from yaoya.models.item import Item
 from yaoya.models.user import User
+
 
 class MockDB:
     def __init__(self, dbpath: Path) -> None:
@@ -65,6 +66,20 @@ class MockDB:
                 "producing_area": _("prefecture")
             }
         )
+        mock_items = [
+            Item(
+                item_id=data["item_id"],
+                name=data["name"],
+                price=data["price"],
+                producing_area=data["producing_area"]
+            )
+            for data in schema.create(n)
+        ]
+        with self.connect() as db:
+            table: dataset.Table = db["items"]
+            for mock_item in mock_items:
+                table.insert(mock_item.to_dict())
+
 
 class MockSessionDB:
     def __init__(self, dbpath: Path) -> None:

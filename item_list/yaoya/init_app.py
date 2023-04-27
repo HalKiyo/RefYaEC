@@ -4,8 +4,10 @@ from tempfile import TemporaryDirectory
 from yaoya.app import MultiPageApp
 from yaoya.const import PageId
 from yaoya.pages.base import BasePage
+from yaoya.pages.public.item_list import ItemListPage
 from yaoya.pages.public.login import LoginPage
 from yaoya.services.auth import MockAuthAPIClientService
+from yaoya.services.item import MockItemAPIClientService
 from yaoya.services.mock import MockDB, MockSessionDB
 from yaoya.services.user import MockUserAPIClientService
 from yaoya.session import StreamlitSessionManager
@@ -19,13 +21,15 @@ def init_session() -> StreamlitSessionManager:
     ssm = StreamlitSessionManager(
         auth_api_client=MockAuthAPIClientService(mockdb, session_db),
         user_api_client=MockUserAPIClientService(mockdb, session_db),
+        item_api_client=MockItemAPIClientService(mockdb)
     )
     return ssm
 
 # ページの初期化
 def init_pages(ssm: StreamlitSessionManager) -> list[BasePage]:
     pages = [
-        LoginPage(page_id=PageId.PUBLIC_LOGIN.name, title="ログイン", ssm=ssm)
+        LoginPage(page_id=PageId.PUBLIC_LOGIN.name, title="ログイン", ssm=ssm),
+        ItemListPage(page_id=PageId.PUBLIC_ITEM_LIST, title="商品詳細", ssm=ssm)
     ]
     return pages
 
