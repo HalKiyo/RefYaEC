@@ -56,7 +56,7 @@ class StreamlitSessionManager:
         self._session_state[SessionKey.ITEM.name] = item
 
     def set_page_id(self, page_id: PageId) -> None:
-        self._session_state[SessionKey.PAGE_ID.name] = page_id.name
+        self._session_state[SessionKey.PAGE_ID.name] = page_id
 
     def set_session_id(self, session_id: str) -> None:
         self._session_state[SessionKey.SESSION_ID.name] = session_id

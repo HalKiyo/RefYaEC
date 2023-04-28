@@ -13,6 +13,7 @@ class MultiPageApp:
         self.nav_label = nav_label
 
     def render(self) -> None:
+
         #ページ選択ボックスを追加
         page_id = st.sidebar.selectbox(
             self.nav_label,
