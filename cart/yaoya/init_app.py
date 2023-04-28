@@ -4,10 +4,12 @@ from tempfile import TemporaryDirectory
 from yaoya.app import MultiPageApp
 from yaoya.const import PageId
 from yaoya.pages.base import BasePage
+from yaoya.pages.member.cart import CartPage
 from yaoya.pages.public.item_list import ItemListPage
 from yaoya.pages.public.item_detail import ItemDetailPage
 from yaoya.pages.public.login import LoginPage
 from yaoya.services.auth import MockAuthAPIClientService
+from yaoya.services.cart import MockCartAPIClientService
 from yaoya.services.item import MockItemAPIClientService
 from yaoya.services.mock import MockDB, MockSessionDB
 from yaoya.services.user import MockUserAPIClientService
@@ -22,7 +24,8 @@ def init_session() -> StreamlitSessionManager:
     ssm = StreamlitSessionManager(
         auth_api_client=MockAuthAPIClientService(mockdb, session_db),
         user_api_client=MockUserAPIClientService(mockdb, session_db),
-        item_api_client=MockItemAPIClientService(mockdb)
+        item_api_client=MockItemAPIClientService(mockdb),
+        cart_api_client=MockCartAPIClientService(session_db)
     )
     return ssm
 
@@ -31,7 +34,8 @@ def init_pages(ssm: StreamlitSessionManager) -> list[BasePage]:
     pages = [
         LoginPage(page_id=PageId.PUBLIC_LOGIN.name, title="ログイン", ssm=ssm),
         ItemListPage(page_id=PageId.PUBLIC_ITEM_LIST.name, title="商品一覧", ssm=ssm),
-        ItemDetailPage(page_id=PageId.PUBLIC_ITEM_DETAIL.name, title="商品詳細", ssm=ssm)
+        ItemDetailPage(page_id=PageId.PUBLIC_ITEM_DETAIL.name, title="商品詳細", ssm=ssm),
+        CartPage(page_id=PageId.MEMBER_CART, title="カート", ssm=ssm)
     ]
     return pages
 

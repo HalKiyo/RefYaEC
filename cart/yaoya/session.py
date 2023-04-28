@@ -6,6 +6,7 @@ from yaoya.const import PageId, SessionKey
 from yaoya.models.item import Item
 from yaoya.models.user import User
 from yaoya.services.auth import IAuthAPIClientService
+from yaoya.services.cart import ICartAPIClientService
 from yaoya.services.item import IItemAPIClientService
 from yaoya.services.user import IUserAPIClientService
 
@@ -15,12 +16,14 @@ class StreamlitSessionManager:
         self,
         auth_api_client: IAuthAPIClientService,
         user_api_client: IUserAPIClientService,
-        item_api_client: IItemAPIClientService
+        item_api_client: IItemAPIClientService,
+        cart_api_client: ICartAPIClientService
     ) -> None:
         self._session_state = st.session_state
         self._session_state[SessionKey.AUTH_API_CLIENT.name] = auth_api_client
         self._session_state[SessionKey.USER_API_CLIENT.name] = user_api_client
         self._session_state[SessionKey.ITEM_API_CLIENT.name] = item_api_client
+        self._session_state[SessionKey.CART_API_CLIENT.name] = cart_api_client
         self._session_state[SessionKey.USER.name] = None
         self._session_state[SessionKey.ITEM.name] = None
         self._session_state[SessionKey.PAGE_ID.name] = PageId.PUBLIC_LOGIN.name
@@ -44,6 +47,9 @@ class StreamlitSessionManager:
 
     def get_item_api_client(self) -> IItemAPIClientService:
         return self._session_state[SessionKey.ITEM_API_CLIENT.name]
+
+    def get_cart_api_client(self) -> ICartAPIClientService:
+        return self._session_state[SessionKey.CART_API_CLIENT.name]
 
     def set_user(self, user: User) -> None:
         self._session_state[SessionKey.USER.name] = user
