@@ -1,4 +1,5 @@
 import streamlit as st
+from yaoya.models.cart import CartItem
 from yaoya.models.item import Item
 from yaoya.pages.base import BasePage
 
@@ -42,9 +43,18 @@ class ItemDetailPage(BasePage):
     def _render_cart_in(self, item: Item, session_id: str) -> None:
         with st.form("item_detail_form"):
             st.number_input("数量", step=1, min_value=1, max_value=9, key="_quantity")
-            kwargs = dict(item=item, session_ide=session_id)
+            kwargs = dict(item=item, session_id=session_id)
             st.form_submit_button(label="カートに追加", on_click=self._cart_in, kwargs=kwargs)
 
     def _cart_in(self, item: Item, session_id: str) -> None:
+        cart_api_client = self.ssm.get_cart_api_client()
+        cart_item = CartItem(
+            item=item,
+            quantity=st.session_state["_quantity"],
+        )
+        cart_api_client.add_item(
+            session_id=session_id,
+            cart_item=cart_item
+        )
         st.sidebar.success("カートに追加しました")
         st.session_state["_quantity"] = 1

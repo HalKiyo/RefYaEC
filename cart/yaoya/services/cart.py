@@ -31,7 +31,7 @@ class MockCartAPIClientService(ICartAPIClientService):
         return session.cart
 
     def add_item(self, session_id: str, cart_item: CartItem) -> None:
-        with session_db.connect() as db:
+        with self.session_db.connect() as db:
             query = Query()
             # セッションテーブルの更新。TinyDBはコールバック関数を渡して更新可能
             db.update(self._get_add_item_cb(cart_item), query.session_id == session_id)
@@ -72,7 +72,7 @@ class MockCartAPIClientService(ICartAPIClientService):
                 user_id=session.user_id,
                 cart=Cart(user_id=session.user_id)
             )
-        for key, value in new_session.to_dict().items():
-            doc[key] = value
+            for key, value in new_session.to_dict().items():
+                doc[key] = value
 
         return transform
