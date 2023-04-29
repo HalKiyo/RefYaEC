@@ -10,6 +10,7 @@ class CartPage(MemberPage):
         cart_api_client = self.ssm.get_cart_api_client()
         cart = cart_api_client.get_cart(session_id)
 
+        # ここでcart.cart_itemsがNoneになってしまいエラーになる
         if len(cart.cart_items) == 0:
             st.warning("カートに入っている商品はありません。")
             return

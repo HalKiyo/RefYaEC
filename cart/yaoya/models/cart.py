@@ -19,12 +19,13 @@ class CartItem(BaseDataModel):
         )
 
     @classmethod
-    def form_dict(cls, data: dict[str, str]) -> CartItem:
+    def from_dict(cls, data: dict[str, str]) -> CartItem:
         item_data = json.loads(data["item"])
         return CartItem(
             item=Item.from_dict(item_data),
             quantity=int(data["quantity"])
         )
+
 
 @dataclass(frozen=True)
 class Cart(BaseDataModel):
@@ -45,6 +46,6 @@ class Cart(BaseDataModel):
         cart_items = [CartItem.from_dict(cart_item_dict) for cart_item_dict in json.loads(data["cart_items"])]
         return Cart(
             user_id=data["user_id"],
-            cart_items=cart_items,
+            cart_items=cart_items, # list型で複数データ保持
             total_price=int(data["total_price"])
         )

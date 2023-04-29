@@ -36,11 +36,14 @@ class MockCartAPIClientService(ICartAPIClientService):
             # セッションテーブルの更新。TinyDBはコールバック関数を渡して更新可能
             db.update(self._get_add_item_cb(cart_item), query.session_id == session_id)
 
+
     def _get_add_item_cb(self, cart_item: CartItem) -> Callable[[dict], None]:
         def transform(doc: dict) -> None:
+
             session = Session.from_dict(doc)
             cart = session.cart
             new_cart_items = [*cart.cart_items, cart_item]
+
             # カート内の合計金額を更新
             new_total_price = cart_item.item.price * cart_item.quantity + cart.total_price
             # データクラスはイミュータブルなので、データクラスを新たに作成し、既存のレコードを置き換える
@@ -54,8 +57,10 @@ class MockCartAPIClientService(ICartAPIClientService):
                 session_id=session.session_id,
                 cart=new_cart
             )
+
             for key, value in new_session.to_dict().items():
                 doc[key] = value
+
 
         return transform
 
