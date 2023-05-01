@@ -54,7 +54,7 @@ class MockOrderAPIClientService(IOrderAPIClientService):
             subtotal_price = cart_item.item.price * cart_item.quantity
             order_detail = OrderDetail(
                 order_no=idx + 1,
-                item=cart_item.Item,
+                item=cart_item.item,
                 quantity=cart_item.quantity,
                 subtotal_price=subtotal_price
             )
@@ -71,7 +71,7 @@ class MockOrderAPIClientService(IOrderAPIClientService):
     def _get_session(self, session_id: str) -> Session:
         with self.session_db.connect() as db:
             query = Query()
-            doc = db.serch(query.session_id == session_id)[0]
+            doc = db.search(query.session_id == session_id)[0]
             session = Session.from_dict(doc)
 
         return session

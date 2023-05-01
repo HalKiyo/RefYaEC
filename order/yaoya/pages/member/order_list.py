@@ -25,7 +25,8 @@ class OrderListPage(MemberPage):
 
         # 注文一覧を取得
         try:
-            orders = order_api_client.get_ordera(session_id)
+            orders = order_api_client.get_orders(session_id)
+            print(orders)
         except NotFoundError:
             st.warning("注文履歴はありません。")
             return
@@ -41,9 +42,9 @@ class OrderListPage(MemberPage):
             col_no.write(index + 1)
             col_id.write(order.order_id[-8:])
             col_total.write(order.ordered_at.strftime("%Y-%m-%d %H:%M:%S"))
-            col_button.button("詳細", 
-                              key=order.order_id, 
-                              on_click=self._order_detail, 
+            col_button.button("詳細",
+                              key=order.order_id,
+                              on_click=self._order_detail,
                               args=(order))
 
     def _order_detail(self, order: Order) -> None:
