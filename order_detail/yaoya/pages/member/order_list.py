@@ -45,7 +45,7 @@ class OrderListPage(MemberPage):
             col_button.button("詳細",
                               key=order.order_id,
                               on_click=self._order_detail,
-                              args=(order))
+                              args=(order,))
 
     def _order_detail(self, order: Order) -> None:
         self.ssm.set_order(order)
