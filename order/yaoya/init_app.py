@@ -39,7 +39,7 @@ def init_pages(ssm: StreamlitSessionManager) -> list[BasePage]:
         ItemListPage(page_id=PageId.PUBLIC_ITEM_LIST.name, title="商品一覧", ssm=ssm),
         ItemDetailPage(page_id=PageId.PUBLIC_ITEM_DETAIL.name, title="商品詳細", ssm=ssm),
         CartPage(page_id=PageId.MEMBER_CART.name, title="カート", ssm=ssm),
-        OrderListPage(page_id=PageId.MEMBER_ORDER_LIST, title="注文一覧", ssm=ssm)
+        OrderListPage(page_id=PageId.MEMBER_ORDER_LIST.name, title="注文一覧", ssm=ssm)
     ]
     return pages
 

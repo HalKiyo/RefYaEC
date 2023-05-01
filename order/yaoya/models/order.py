@@ -60,6 +60,6 @@ class Order(BaseDataModel):
             order_id=data["order_id"],
             user_id=data["user_id"],
             total_price=int(data["total_price"]),
-            ordered_at=datetime.fromisofomat(data["ordered_at"]),
+            ordered_at=datetime.fromisoformat(data["ordered_at"]),
             details=details
         )

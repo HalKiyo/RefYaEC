@@ -1,4 +1,5 @@
 import streamlit as st
+from yaoya.const import PageId
 from yaoya.pages.member.base import MemberPage
 
 class CartPage(MemberPage):
@@ -10,7 +11,6 @@ class CartPage(MemberPage):
         cart_api_client = self.ssm.get_cart_api_client()
         cart = cart_api_client.get_cart(session_id)
 
-        # ここでcart.cart_itemsがNoneになってしまいエラーになる
         if len(cart.cart_items) == 0:
             st.warning("カートに入っている商品はありません。")
             return
@@ -41,6 +41,7 @@ class CartPage(MemberPage):
         st.text(f"合計金額: {cart.total_price}")
 
         st.button("注文", on_click=self._order_commit)
+        st.button("注文ページ", on_click=self._order_page)
 
     def _order_commit(self) -> None:
         session_id = self.ssm.get_session_id()
@@ -50,4 +51,7 @@ class CartPage(MemberPage):
         order_api_client.order_commit(session_id)
         cart_api_client.clear_cart(session_id)
         st.sidebar.success("注文が完了しました")
+        st.button("注文ページ", on_click=self._order_page)
 
+    def _order_page(self) -> None:
+        self.ssm.set_page_id(PageId.MEMBER_ORDER_LIST)

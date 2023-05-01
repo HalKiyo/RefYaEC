@@ -1,4 +1,5 @@
 import streamlit as st
+from yaoya.const import PageId
 from yaoya.models.cart import CartItem
 from yaoya.models.item import Item
 from yaoya.pages.base import BasePage
@@ -25,6 +26,7 @@ class ItemDetailPage(BasePage):
             return
 
         self._render_cart_in(item, session_id)
+        st.button("カート", on_click=self._cart_page)
 
     def _render_item_detail(self, item: Item) -> None:
         show_item = {
@@ -58,3 +60,6 @@ class ItemDetailPage(BasePage):
         )
         st.sidebar.success("カートに追加しました")
         st.session_state["_quantity"] = 1
+
+    def _cart_page(self) -> None:
+        self.ssm.set_page_id(PageId.MEMBER_CART)

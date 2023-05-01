@@ -26,7 +26,6 @@ class OrderListPage(MemberPage):
         # 注文一覧を取得
         try:
             orders = order_api_client.get_orders(session_id)
-            print(orders)
         except NotFoundError:
             st.warning("注文履歴はありません。")
             return
@@ -41,7 +40,8 @@ class OrderListPage(MemberPage):
             ) = st.columns(col_size)
             col_no.write(index + 1)
             col_id.write(order.order_id[-8:])
-            col_total.write(order.ordered_at.strftime("%Y-%m-%d %H:%M:%S"))
+            col_total.write(order.total_price)
+            col_date.write(order.ordered_at.strftime("%Y-%m-%d %H:%M:%S"))
             col_button.button("詳細",
                               key=order.order_id,
                               on_click=self._order_detail,

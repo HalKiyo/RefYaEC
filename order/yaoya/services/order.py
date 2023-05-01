@@ -28,6 +28,7 @@ class MockOrderAPIClientService(IOrderAPIClientService):
 
     def get_orders(self, session_id: str) -> list[Order]:
         session = self._get_session(session_id)
+
         with self.mockdb.connect() as db:
             orders_table: dataset.Table = db["orders"]
             orders_data = list(orders_table.find(user_id=session.user_id))
@@ -47,6 +48,8 @@ class MockOrderAPIClientService(IOrderAPIClientService):
                 user_id=order.user_id,
                 order_body=json.dumps(order.to_dict(), default=str)
             )
+            orders_table.insert(order_data)
+
 
     def _create_order_from_cart(self, cart: Cart) -> None:
         order_details = []
