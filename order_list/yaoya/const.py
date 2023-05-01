@@ -21,7 +21,6 @@ class PageId(Enum):
     PUBLIC_ITEM_DETAIL = auto()
     MEMBER_CART = auto()
     MEMBER_ORDER_LIST = auto()
-    MEMBER_ORDER_DETAIL = auto()
 
 
 class UserRole(Enum):

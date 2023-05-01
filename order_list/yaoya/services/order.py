@@ -6,7 +6,7 @@ from uuid import uuid4
 import dataset
 from tinydb import Query
 from yaoya.models.cart import Cart
-from yaoya.models.order import Order, OrderDetail
+from yaoya.models.order import Order
 from yaoya.models. session import Session
 from yaoya.services.mock import MockDB, MockSessionDB
 
@@ -52,22 +52,11 @@ class MockOrderAPIClientService(IOrderAPIClientService):
 
 
     def _create_order_from_cart(self, cart: Cart) -> None:
-        order_details = []
-        for idx, cart_item in enumerate(cart.cart_items):
-            subtotal_price = cart_item.item.price * cart_item.quantity
-            order_detail = OrderDetail(
-                order_no=idx + 1,
-                item=cart_item.item,
-                quantity=cart_item.quantity,
-                subtotal_price=subtotal_price
-            )
-            order_details.append(order_detail)
         order = Order(
             order_id=str(uuid4()),
             user_id=cart.user_id,
             total_price=cart.total_price,
-            ordered_at=datetime.now(JST),
-            details=order_details
+            ordered_at=datetime.now(JST)
         )
         return order
 
