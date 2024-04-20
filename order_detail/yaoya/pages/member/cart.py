@@ -41,7 +41,6 @@ class CartPage(MemberPage):
         st.text(f"合計金額: {cart.total_price}")
 
         st.button("注文", on_click=self._order_commit)
-        st.button("注文ページ", on_click=self._order_page)
 
     def _order_commit(self) -> None:
         session_id = self.ssm.get_session_id()
